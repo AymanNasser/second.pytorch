@@ -67,6 +67,10 @@ def find_cuda():
     if cuda_home is None:
         raise RuntimeError(
             "No CUDA runtime is found, using CUDA_HOME='{}'".format(cuda_home))
+
+    # An-Added check to trace cuda error 
+    else:
+    	print("CUDA is found at /find_cuda/ function")
     return cuda_home
 
 
@@ -95,6 +99,9 @@ def find_cuda_device_arch():
                 return 0;
             }
             """
+            # An-Added check to trace cuda error
+            print("device_query_path doesn't exist")
+
             with tempfile.NamedTemporaryFile('w', suffix='.cc') as f:
                 f_path = Path(f.name)
                 f.write(source)
@@ -117,13 +124,18 @@ def find_cuda_device_arch():
                 except:
                     return None
         else:
+            print("1")
             cmd = f"{str(device_query_path)} | grep 'CUDA Capability'"
-            arch = subprocess.check_output(
-                cmd, shell=True).decode().rstrip('\r\n').split(" ")[-1]
+            arch = subprocess.check_output(cmd, shell=True).decode().rstrip('\r\n').split(" ")[-1]
+            print("2")
+
         # assert len(arch) == 2
+        print("3")
         arch_list = [int(s) for s in arch.split(".")]
         arch_int = arch_list[0] * 10 + arch_list[1]
         find_work_arch = False
+        print("4")
+
         while arch_int > 10:
             try:
                 res = subprocess.check_output("nvcc -arch=sm_{}".format(arch_int), shell=True,  stderr=subprocess.STDOUT)
@@ -142,6 +154,8 @@ def find_cuda_device_arch():
 
     except Exception:
         arch = None
+    
+    print("ARCH at /find_cuda_device_arch()/ function=", arch) # An-Added check to trace cuda error
     return arch
 
 

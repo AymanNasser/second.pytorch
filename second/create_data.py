@@ -18,7 +18,6 @@ except ImportError:
     from second.utils.progress_bar import progress_bar_iter as prog_bar
 """
 
-
 def _read_imageset_file(path):
     with open(path, 'r') as f:
         lines = f.readlines()

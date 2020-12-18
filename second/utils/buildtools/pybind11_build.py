@@ -87,7 +87,8 @@ def load_pb11(sources,
     outs = []
     main_sources = []
     if arch is None:
-        arch = find_cuda_device_arch()
+        # arch = find_cuda_device_arch()
+        arch = "compute_50"
 
     for s in sources:
         s = str(s)

@@ -11,7 +11,6 @@ import fire
 
 from second.utils.find import find_cuda, find_cuda_device_arch
 
-
 class Gpp:
     def __init__(self,
                  sources,
@@ -118,7 +117,8 @@ class Nvcc(Gpp):
                  extra_lflags: str = None,
                  build_directory: str = None):
         if arch is None:
-            arch = find_cuda_device_arch()
+            # arch = find_cuda_device_arch()
+            arch = "compute_50"
             if arch is None:
                 raise ValueError("you must specify arch if use cuda.")
 
