@@ -96,7 +96,7 @@ def create_kitti_info_file(data_path,
     print(f"Kitti info val file is saved to {filename}")
     with open(filename, 'wb') as f:
         pickle.dump(kitti_infos_val, f)
-    """
+    # 
     if create_trainval:
         kitti_infos_trainval = kitti.get_kitti_image_info(
             data_path,
@@ -109,7 +109,7 @@ def create_kitti_info_file(data_path,
         print(f"Kitti info trainval file is saved to {filename}")
         with open(filename, 'wb') as f:
             pickle.dump(kitti_infos_trainval, f)
-    """
+    # 
     filename = save_path / 'kitti_infos_trainval.pkl'
     print(f"Kitti info trainval file is saved to {filename}")
     with open(filename, 'wb') as f:

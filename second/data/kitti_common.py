@@ -77,7 +77,8 @@ def iou(boxes1, boxes2, add1=False):
 def get_image_index_str(img_idx):
     return "{:06d}".format(img_idx)
 
-
+# This func is called for every image in image_2 folder,
+# checking the existance of the images 
 def get_kitti_info_path(idx,
                         prefix,
                         info_type='image_2',
@@ -120,13 +121,13 @@ def _extend_matrix(mat):
     mat = np.concatenate([mat, np.array([[0., 0., 0., 1.]])], axis=0)
     return mat
 
-
+# Thread & checking error occurs here 
 def get_kitti_image_info(path,
                          training=True,
                          label_info=True,
                          velodyne=False,
                          calib=False,
-                         image_ids=7481,
+                         image_ids=7481, # AN-Replaced image_ids from 7481 to 0
                          extend_matrix=True,
                          num_worker=8,
                          relative_path=True,
@@ -137,6 +138,8 @@ def get_kitti_image_info(path,
         image_ids = list(range(image_ids))
 
     def map_func(idx):
+        
+        # print('3--###############')
         image_info = {'image_idx': idx, 'pointcloud_num_features': 4}
         annotations = None
         if velodyne:
@@ -206,9 +209,15 @@ def get_kitti_image_info(path,
             image_info['annos'] = annotations
             add_difficulty_to_annos(image_info)
         return image_info
+    # print('1--###############')
 
+    # The concurrent.futures module provides the developer with a high-level interface for asynchronously executing callables. 
+    # Basically concurrent.futures is an abstraction layer on top of Python’s threading and multiprocessing modules that simplifies using them.
+    # Concurrent.futures includes an abstract class called Executor. It cannot be used directly though, 
+    # so you will need to use one of its two subclasses: ThreadPoolExecutor or ProcessPoolExecutor
     with futures.ThreadPoolExecutor(num_worker) as executor:
         image_infos = executor.map(map_func, image_ids)
+    # print('2--###############')
     return list(image_infos)
 
 
